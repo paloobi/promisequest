@@ -6,7 +6,7 @@ var expect = require('chai').expect;
 var mongoose = require('mongoose');
 
 // require in models
-var models = require('../../../server/models/problem');
+var models = require('../../../server/models');
 var Problem = mongoose.model('Problem');
 // var Test = models.Test;
 
