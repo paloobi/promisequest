@@ -1,1 +1,2 @@
-var problem = require('problem');
+
+require('./problem');
