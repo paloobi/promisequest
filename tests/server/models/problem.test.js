@@ -23,6 +23,14 @@ describe('Problem model', function () {
 
     describe('validation', function() {
 
+        var test;
+        beforeEach('Create dummy Test object', function(done) {
+          test = new Test({
+            content: 'abc'
+          });
+          done();
+        })
+
         afterEach('Clear test database', function (done) {
             clearDB(done);
         });
@@ -32,7 +40,7 @@ describe('Problem model', function () {
             var p = new Problem({
               prompt: 'abc',
               starter: 'abc',
-              test: 'abc'
+              test: test._id
             });
             p.validate()
             .then(function() {
@@ -50,7 +58,7 @@ describe('Problem model', function () {
             var p = new Problem({
               name: 'abc',
               starter: 'abc',
-              test: 'abc'
+              test: test._id
             });
             p.validate()
             .then(function() {
@@ -69,7 +77,7 @@ describe('Problem model', function () {
             var p = new Problem({
               name: 'abc',
               prompt: 'abc',
-              test: 'abc'
+              test: test._id
             });
             p.validate()
             .then(function() {
