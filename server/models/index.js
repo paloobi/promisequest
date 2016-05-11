@@ -1,2 +1,3 @@
 
 require('./problem');
+require('./test');

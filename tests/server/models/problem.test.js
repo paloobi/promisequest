@@ -6,9 +6,9 @@ var expect = require('chai').expect;
 var mongoose = require('mongoose');
 
 // require in models
-var models = require('../../../server/models/problem');
+var models = require('../../../server/models');
 var Problem = mongoose.model('Problem');
-// var Test = models.Test;
+var Test = mongoose.model('Test');
 
 describe('Problem model', function () {
 
@@ -17,16 +17,19 @@ describe('Problem model', function () {
         mongoose.connect(dbURI, done);
     });
 
-    // var test;
-    // beforeEach('Create dummy Test', function(done) {
-    //   test = new Test();
-    // });
-
     it('should exist', function () {
         expect(Problem).to.exist;
     });
 
     describe('validation', function() {
+
+        var test;
+        beforeEach('Create dummy Test object', function(done) {
+          test = new Test({
+            content: 'abc'
+          });
+          done();
+        })
 
         afterEach('Clear test database', function (done) {
             clearDB(done);
@@ -37,7 +40,7 @@ describe('Problem model', function () {
             var p = new Problem({
               prompt: 'abc',
               starter: 'abc',
-              test: 'abc'
+              test: test._id
             });
             p.validate()
             .then(function() {
@@ -55,7 +58,7 @@ describe('Problem model', function () {
             var p = new Problem({
               name: 'abc',
               starter: 'abc',
-              test: 'abc'
+              test: test._id
             });
             p.validate()
             .then(function() {
@@ -74,7 +77,7 @@ describe('Problem model', function () {
             var p = new Problem({
               name: 'abc',
               prompt: 'abc',
-              test: 'abc'
+              test: test._id
             });
             p.validate()
             .then(function() {
@@ -105,7 +108,7 @@ describe('Problem model', function () {
               done();
             })
           });
-          xit('must be a valid instance of Test model', function(done){
+          it('must be a valid instance of Test model', function(done){
             var p = new Problem({
               name: 'abc',
               prompt: 'abc',
