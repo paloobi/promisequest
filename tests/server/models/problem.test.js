@@ -5,8 +5,10 @@ var sinon = require('sinon');
 var expect = require('chai').expect;
 var mongoose = require('mongoose');
 
-// require in Problem model
-var Problem = require('../../../server/models/problem');
+// require in models
+var models =  require('../../../server/models/problem');
+var Problem = models.Problem;
+var Test = models.Test;
 
 describe('Problem model', function () {
 
@@ -15,22 +17,27 @@ describe('Problem model', function () {
         mongoose.connect(dbURI, done);
     });
 
+    var test;
+    beforeEach('Create dummy Test', function(done) {
+      test = new Test();
+    })
+
     afterEach('Clear test database', function (done) {
         clearDB(done);
     });
 
     it('should exist', function () {
-        expect(Problem).to.be.a('function');
+        expect(Problem).to.exist;
     });
 
     describe('validation', function(done) {
 
-        describe('name', function(){
+        describe('name', function() {
           it('is required', function() {
             var p = new Problem({
               prompt: 'abc',
               starter: 'abc',
-              test: 'abc'
+              test: test._id
             });
             p.validate()
             .then(function() {
@@ -43,17 +50,74 @@ describe('Problem model', function () {
         });
 
         describe('prompt', function() {
-          it('is required', function(){});
+          it('is required', function() {
+            var p = new Problem({
+              name: 'abc',
+              starter: 'abc',
+              test: test._id
+            });
+            p.validate()
+            .then(function() {
+              var err = new Error('problem passed validation without prompt');
+              done(err);
+            },
+            function(err) {
+              expect(err).to.exist;
+            });
+          });
         });
 
-        describe('starter', function(){
-          it('is required', function(){});
+        describe('starter', function() {
+          it('is required', function() {
+            var p = new Problem({
+              name: 'abc',
+              prompt: 'abc',
+              test: test._id
+            });
+            p.validate()
+            .then(function() {
+              var err = new Error('problem passed validation without starter');
+              done(err)
+            },
+            function(err) {
+              expect(err).to.exist;
+            })
+          });
         });
 
-        describe('test', function(){
-          it('is required', function(){});
-          it('must be a valid instance of Test model', function(){});
+        describe('test', function() {
+          it('is required', function() {
+            var p = new Problem({
+              name: 'abc',
+              prompt: 'abc',
+              starter: 'abc'
+            });
+            p.validate()
+            .then(function() {
+              var err = new Error('problem passed validation without test');
+              done(err);
+            },
+            function(err) {
+              expect(err).to.exist;
+            })
+          });
+          it('must be a valid instance of Test model', function(){
+            var p = new Problem({
+              name: 'abc',
+              prompt: 'abc',
+              test: 'notamongoid'
+            });
+            p.validate()
+            .then(function() {
+              var err = new Error('problem with invalid test ID passed validation');
+              done(err);
+            },
+            function(err) {
+              expect(err).to.exist;
+            })
+          });
         });
+        
     });
 
     xdescribe('virtuals', function() {
