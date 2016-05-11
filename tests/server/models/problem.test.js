@@ -17,11 +17,6 @@ describe('Problem model', function () {
         mongoose.connect(dbURI, done);
     });
 
-    // var test;
-    // beforeEach('Create dummy Test', function(done) {
-    //   test = new Test();
-    // });
-
     it('should exist', function () {
         expect(Problem).to.exist;
     });
