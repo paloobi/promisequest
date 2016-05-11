@@ -8,7 +8,7 @@ var mongoose = require('mongoose');
 // require in models
 var models = require('../../../server/models');
 var Problem = mongoose.model('Problem');
-// var Test = models.Test;
+var Test = mongoose.model('Test');
 
 describe('Problem model', function () {
 
