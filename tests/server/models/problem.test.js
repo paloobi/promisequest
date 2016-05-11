@@ -41,18 +41,16 @@ describe('Problem model', function () {
             });
             p.validate()
             .then(function() {
-              console.log('no error');
               var err = new Error('problem passed validation without a name');
               done(err);
             }, function(err) {
-              console.log('err');
               expect(err).to.exist;
               done();
             })
           });
         });
 
-        xdescribe('prompt', function() {
+        describe('prompt', function() {
           it('is required', function(done) {
             var p = new Problem({
               name: 'abc',
@@ -66,11 +64,12 @@ describe('Problem model', function () {
             },
             function(err) {
               expect(err).to.exist;
+              done();
             });
           });
         });
 
-        xdescribe('starter', function() {
+        describe('starter', function() {
           it('is required', function(done) {
             var p = new Problem({
               name: 'abc',
@@ -80,15 +79,16 @@ describe('Problem model', function () {
             p.validate()
             .then(function() {
               var err = new Error('problem passed validation without starter');
-              done(err)
+              done(err);
             },
             function(err) {
               expect(err).to.exist;
+              done();
             })
           });
         });
 
-        xdescribe('test', function() {
+        describe('test', function() {
           it('is required', function(done) {
             var p = new Problem({
               name: 'abc',
@@ -102,12 +102,15 @@ describe('Problem model', function () {
             },
             function(err) {
               expect(err).to.exist;
+              done();
             })
           });
-          xit('must be a valid instance of Test model', function(){
+          it('must be a valid instance of Test model', function(done){
+            var p1 = new Problem();
             var p = new Problem({
               name: 'abc',
               prompt: 'abc',
+              starter: 'abc',
               test: 'notamongoid'
             });
             p.validate()
@@ -117,6 +120,7 @@ describe('Problem model', function () {
             },
             function(err) {
               expect(err).to.exist;
+              done();
             })
           });
         });

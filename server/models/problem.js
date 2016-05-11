@@ -5,8 +5,18 @@ var ProblemSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  prompt: String,
-  starter: String
+  prompt: {
+    type: String,
+    required: true
+  },
+  starter: {
+    type: String,
+    required: true
+  },
+  test: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  }
 });
 
 mongoose.model('Problem', ProblemSchema);
