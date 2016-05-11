@@ -105,8 +105,7 @@ describe('Problem model', function () {
               done();
             })
           });
-          it('must be a valid instance of Test model', function(done){
-            var p1 = new Problem();
+          xit('must be a valid instance of Test model', function(done){
             var p = new Problem({
               name: 'abc',
               prompt: 'abc',
