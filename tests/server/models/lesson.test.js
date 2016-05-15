@@ -19,14 +19,14 @@ describe('Lesson model', function () {
     });
 
     it('should exist', function () {
-        expect(Lesson).to.exist;
+        expect(Lesason).to.exist;
     });
 
     describe('validation', function() {
 
         var p1, p2;
         var t1, t2;
-        beforeEach('Create dummy Test object', function(done) {
+        beforeEach('Create dummy Lesson object', function(done) {
           t1 = new Test({ content: 'test1' });
           t2 = new Test({ content: 'test2' });
           p1 = new Problem({
@@ -50,14 +50,14 @@ describe('Lesson model', function () {
 
         describe('title', function() {
           it('is required', function(done) {
-            var p = new Problem({
-              prompt: 'abc',
-              starter: 'abc',
-              test: test._id
+            var lesson = new Lesson({
+              description: 'Get started',
+              picture: 'l1.png',
+              problems: ['p1', 'p2']
             });
-            p.validate()
+            lesson.validate()
             .then(function() {
-              var err = new Error('problem passed validation without a name');
+              var err = new Error('lesson passed validation without a title');
               done(err);
             }, function(err) {
               expect(err).to.exist;
@@ -66,16 +66,16 @@ describe('Lesson model', function () {
           });
         });
 
-        describe('prompt', function() {
+        describe('description', function() {
           it('is required', function(done) {
-            var p = new Problem({
-              name: 'abc',
-              starter: 'abc',
-              test: test._id
+            var lesson = new Lesson({
+              title: 'Lesson 1',
+              picture: 'l1.png',
+              problems: ['p1', 'p2']
             });
-            p.validate()
+            lesson.validate()
             .then(function() {
-              var err = new Error('problem passed validation without prompt');
+              var err = new Error('lesson passed validation without description');
               done(err);
             },
             function(err) {
@@ -85,60 +85,45 @@ describe('Lesson model', function () {
           });
         });
 
-        describe('starter', function() {
-          it('is required', function(done) {
-            var p = new Problem({
-              name: 'abc',
-              prompt: 'abc',
-              test: test._id
+        describe('picture', function() {
+
+          beforeEach('Created lesson without picture')
+
+          it('must have image file ending (png, jpeg, jpg, or gif)', function(done) {
+            var lesson = new Lesson({
+              title: 'Lesson 1',
+              description: 'Get started',
+              picture: 'l1',
+              problems: [p1, p2]
             });
-            p.validate()
+            lesson.validate()
             .then(function() {
-              var err = new Error('problem passed validation without starter');
+              var err = new Error('lesson picture passed validation with invalid file extension');
               done(err);
             },
             function(err) {
               expect(err).to.exist;
+              var lesson2 = new Lesson({
+                title: 'Lesson 2',
+                description: 'More info',
+                picture: 'l2.tiff',
+                problems: [p1, p2]
+              })
               done();
-            })
+            });
           });
+
         });
 
-        describe('test', function() {
-          it('is required', function(done) {
-            var p = new Problem({
-              name: 'abc',
-              prompt: 'abc',
-              starter: 'abc'
-            });
-            p.validate()
-            .then(function() {
-              var err = new Error('problem passed validation without test');
-              done(err);
-            },
-            function(err) {
-              expect(err).to.exist;
-              done();
-            })
+        describe('problems', function() {
+
+          it('must be an array of Problem instances', function(done) {
+
           });
-          it('must be a valid instance of Test model', function(done){
-            var p = new Problem({
-              name: 'abc',
-              prompt: 'abc',
-              starter: 'abc',
-              test: 'notamongoid'
-            });
-            p.validate()
-            .then(function() {
-              var err = new Error('problem with invalid test ID passed validation');
-              done(err);
-            },
-            function(err) {
-              expect(err).to.exist;
-              done();
-            })
-          });
-        });
+
+
+
+        })
 
     });
 
