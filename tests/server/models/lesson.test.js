@@ -19,7 +19,7 @@ describe('Lesson model', function () {
     });
 
     it('should exist', function () {
-        expect(Lesason).to.exist;
+        expect(Lesson).to.exist;
     });
 
     describe('validation', function() {
@@ -86,8 +86,6 @@ describe('Lesson model', function () {
         });
 
         describe('picture', function() {
-
-          beforeEach('Created lesson without picture')
 
           it('is optional', function(done) {
             var lesson = new Lesson({
