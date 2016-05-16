@@ -53,7 +53,7 @@ describe('Lesson model', function () {
             var lesson = new Lesson({
               description: 'Get started',
               picture: 'l1.png',
-              problems: ['p1', 'p2']
+              problems: [p1, p2]
             });
             lesson.validate()
             .then(function() {
@@ -71,7 +71,7 @@ describe('Lesson model', function () {
             var lesson = new Lesson({
               title: 'Lesson 1',
               picture: 'l1.png',
-              problems: ['p1', 'p2']
+              problems: [p1, p2]
             });
             lesson.validate()
             .then(function() {
@@ -96,7 +96,7 @@ describe('Lesson model', function () {
             lesson.validate()
             .then(function(){
               done();
-            })
+            });
           })
 
           it('must have image file ending (png, jpeg, jpg, or gif)', function(done) {
@@ -108,7 +108,7 @@ describe('Lesson model', function () {
             });
             lesson.validate()
             .then(function() {
-              var err = new Error('lesson picture passed validation with invalid file extension');
+              var err = new Error('lesson picture passed validation without file extension');
               done(err);
             },
             function(err) {
@@ -119,7 +119,11 @@ describe('Lesson model', function () {
                 picture: 'l2.tiff',
                 problems: [p1, p2]
               })
-              done();
+              return lesson2.validate();
+            })
+            .then(function(){
+              var err = new Error('lesson picture passed validation with invalid file extension')
+              done(err);
             })
             .catch(function(err) {
               expect(err).to.exist;
