@@ -10,7 +10,13 @@ var LessonSchema = mongoose.Schema({
     required: true
   },
   picture: {
-    type: String
+    type: String,
+    validate: {
+      validator: function(val) {
+        return /.*\.(png|jp(e*)g|gif)/g.test(val);
+      },
+      message: '{VALUE} is not a valid image file with extension png, jpg, jpeg or gif!'
+    }
   },
   problems: [{
     type: mongoose.Schema.Types.ObjectId,
