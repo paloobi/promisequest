@@ -8,9 +8,9 @@ var mongoose = require('mongoose');
 // require in models
 var models = require('../../../server/models');
 var Problem = mongoose.model('Problem');
-var Test = mongoose.model('Test');
+var Checker = mongoose.model('Checker');
 
-describe('Test model', function () {
+describe('Checker model', function () {
 
   beforeEach('Establish DB connection', function (done) {
       if (mongoose.connection.db) return done();
@@ -18,7 +18,7 @@ describe('Test model', function () {
   });
 
   it('should exist', function () {
-      expect(Test).to.exist;
+      expect(Checker).to.exist;
   });
 
   describe('validation', function() {
@@ -26,10 +26,10 @@ describe('Test model', function () {
     describe('content', function() {
 
       it('is required', function(done) {
-        var t = new Test();
+        var t = new Checker();
         t.validate()
         .then(function() {
-          var err = new Error('test passed validation without content');
+          var err = new Error('new Checker passed validation without content');
           done(err);
         }, function(err) {
           expect(err).to.exist;

@@ -13,7 +13,7 @@ var ProblemSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  test: {
+  checker: {
     type: mongoose.Schema.Types.ObjectId,
     required: true
   }

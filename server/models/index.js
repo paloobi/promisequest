@@ -1,4 +1,4 @@
 
 require('./problem');
-require('./test');
+require('./checker');
 require('./lesson');
