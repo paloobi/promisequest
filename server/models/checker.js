@@ -1,10 +1,10 @@
 var mongoose = require('mongoose');
 
-var TestSchema = new mongoose.Schema({
+var CheckerSchema = new mongoose.Schema({
   content: {
     type: String,
     required: true
   }
 });
 
-mongoose.model('Test', TestSchema);
+mongoose.model('Checker', CheckerSchema);

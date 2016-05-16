@@ -8,7 +8,7 @@ var mongoose = require('mongoose');
 // require in models
 var models = require('../../../server/models');
 var Problem = mongoose.model('Problem');
-var Test = mongoose.model('Test');
+var Checker = mongoose.model('Checker');
 var Lesson = mongoose.model('Lesson');
 
 describe('Lesson model', function () {
@@ -24,22 +24,22 @@ describe('Lesson model', function () {
 
     describe('validation', function() {
 
-        var p1, p2;
-        var t1, t2;
+        var problem1, problem2;
+        var checker1, checker2;
         beforeEach('Create dummy Lesson object', function(done) {
-          t1 = new Test({ content: 'test1' });
-          t2 = new Test({ content: 'test2' });
-          p1 = new Problem({
+          checker1 = new Checker({ content: 'checker1' });
+          checker2 = new Checker({ content: 'checker2' });
+          problem1 = new Problem({
             name: 'problem1',
             prompt: 'get started',
             starter: 'function() {}',
-            test: t1._id
+            checker: checker1._id
           });
-          p2 = new Problem({
+          problem2 = new Problem({
             name: 'problem2',
             prompt: 'next problem',
             starter: 'function(a,b){}',
-            test: t2._id
+            checker: checker2._id
           })
           done();
         })
@@ -53,7 +53,7 @@ describe('Lesson model', function () {
             var lesson = new Lesson({
               description: 'Get started',
               picture: 'l1.png',
-              problems: [p1, p2]
+              problems: [problem1, problem2]
             });
             lesson.validate()
             .then(function() {
@@ -71,7 +71,7 @@ describe('Lesson model', function () {
             var lesson = new Lesson({
               title: 'Lesson 1',
               picture: 'l1.png',
-              problems: [p1, p2]
+              problems: [problem1, problem2]
             });
             lesson.validate()
             .then(function() {
@@ -91,7 +91,7 @@ describe('Lesson model', function () {
             var lesson = new Lesson({
               title: 'Lesson 1',
               description: 'Get started',
-              problems: [p1, p2]
+              problems: [problem1, problem2]
             });
             lesson.validate()
             .then(function(){
@@ -104,7 +104,7 @@ describe('Lesson model', function () {
               title: 'Lesson 1',
               description: 'Get started',
               picture: 'l1',
-              problems: [p1, p2]
+              problems: [problem1, problem2]
             });
             lesson.validate()
             .then(function() {
@@ -117,7 +117,7 @@ describe('Lesson model', function () {
                 title: 'Lesson 2',
                 description: 'More info',
                 picture: 'l2.tiff',
-                problems: [p1, p2]
+                problems: [problem1, problem2]
               })
               return lesson2.validate();
             })
@@ -140,7 +140,7 @@ describe('Lesson model', function () {
                 title: 'Lesson 1',
                 description: 'Get started',
                 picture: fileName,
-                problems: [p1, p2]
+                problems: [problem1, problem2]
               });
               lessonPromises.push( lesson.validate() )
             }
@@ -159,13 +159,13 @@ describe('Lesson model', function () {
             var goodLesson = new Lesson({
                 title: 'Lesson 1',
                 description: 'Get started',
-                problems: [p1, p2]
+                problems: [problem1, problem2]
             });
 
             var badLesson = new Lesson({
               title: 'Lesson 2',
               description: 'no problems',
-              problems: ['p1', 'p2']
+              problems: ['problem1', 'problem2']
             });
 
             goodLesson.validate()

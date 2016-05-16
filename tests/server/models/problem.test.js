@@ -8,7 +8,7 @@ var mongoose = require('mongoose');
 // require in models
 var models = require('../../../server/models');
 var Problem = mongoose.model('Problem');
-var Test = mongoose.model('Test');
+var Checker = mongoose.model('Checker');
 
 describe('Problem model', function () {
 
@@ -23,9 +23,9 @@ describe('Problem model', function () {
 
     describe('validation', function() {
 
-        var test;
-        beforeEach('Create dummy Test object', function(done) {
-          test = new Test({
+        var checker;
+        beforeEach('Create dummy Checker object', function(done) {
+          checker = new Checker({
             content: 'abc'
           });
           done();
@@ -37,12 +37,12 @@ describe('Problem model', function () {
 
         describe('name', function() {
           it('is required', function(done) {
-            var p = new Problem({
+            var problem = new Problem({
               prompt: 'abc',
               starter: 'abc',
-              test: test._id
+              checker: checker._id
             });
-            p.validate()
+            problem.validate()
             .then(function() {
               var err = new Error('problem passed validation without a name');
               done(err);
@@ -55,12 +55,12 @@ describe('Problem model', function () {
 
         describe('prompt', function() {
           it('is required', function(done) {
-            var p = new Problem({
+            var problem = new Problem({
               name: 'abc',
               starter: 'abc',
-              test: test._id
+              checker: checker._id
             });
-            p.validate()
+            problem.validate()
             .then(function() {
               var err = new Error('problem passed validation without prompt');
               done(err);
@@ -74,12 +74,12 @@ describe('Problem model', function () {
 
         describe('starter', function() {
           it('is required', function(done) {
-            var p = new Problem({
+            var problem = new Problem({
               name: 'abc',
               prompt: 'abc',
-              test: test._id
+              checker: checker._id
             });
-            p.validate()
+            problem.validate()
             .then(function() {
               var err = new Error('problem passed validation without starter');
               done(err);
@@ -91,16 +91,16 @@ describe('Problem model', function () {
           });
         });
 
-        describe('test', function() {
+        describe('checker', function() {
           it('is required', function(done) {
-            var p = new Problem({
+            var problem = new Problem({
               name: 'abc',
               prompt: 'abc',
               starter: 'abc'
             });
-            p.validate()
+            problem.validate()
             .then(function() {
-              var err = new Error('problem passed validation without test');
+              var err = new Error('problem passed validation without checker');
               done(err);
             },
             function(err) {
@@ -108,16 +108,16 @@ describe('Problem model', function () {
               done();
             })
           });
-          it('must be a valid instance of Test model', function(done){
-            var p = new Problem({
+          it('must be a valid instance of Checker model', function(done){
+            var problem = new Problem({
               name: 'abc',
               prompt: 'abc',
               starter: 'abc',
-              test: 'notamongoid'
+              checker: 'notamongoid'
             });
-            p.validate()
+            problem.validate()
             .then(function() {
-              var err = new Error('problem with invalid test ID passed validation');
+              var err = new Error('problem with invalid checker ID passed validation');
               done(err);
             },
             function(err) {
