@@ -89,6 +89,18 @@ describe('Lesson model', function () {
 
           beforeEach('Created lesson without picture')
 
+          it('is optional', function(done) {
+            var lesson = new Lesson({
+              title: 'Lesson 1',
+              description: 'Get started',
+              problems: [p1, p2]
+            });
+            lesson.validate()
+            .then(function(){
+              done();
+            })
+          })
+
           it('must have image file ending (png, jpeg, jpg, or gif)', function(done) {
             var lesson = new Lesson({
               title: 'Lesson 1',
@@ -110,7 +122,31 @@ describe('Lesson model', function () {
                 problems: [p1, p2]
               })
               done();
+            })
+            .catch(function(err) {
+              expect(err).to.exist;
+              done();
             });
+          });
+
+          it('supports png, jpeg, jpg, and gif', function(done) {
+            var fileTypes = ['png', 'jpeg', 'jpg', 'gif'];
+            var lessonPromises = [];
+            for (var i of fileTypes) {
+              var fileName = 'li.' + i;
+              var lesson = new Lesson({
+                title: 'Lesson 1',
+                description: 'Get started',
+                picture: fileName,
+                problems: [p1, p2]
+              });
+              lessonPromises.push( lesson.validate() )
+            }
+            Promise.all(lessonPromises)
+            .then(function() { 
+              done();
+            })
+            .catch(done);
           });
 
         });
@@ -118,10 +154,34 @@ describe('Lesson model', function () {
         describe('problems', function() {
 
           it('must be an array of Problem instances', function(done) {
+            var goodLesson = new Lesson({
+                title: 'Lesson 1',
+                description: 'Get started',
+                problems: [p1, p2]
+            });
+
+            var badLesson = new Lesson({
+              title: 'Lesson 2',
+              description: 'no problems',
+              problems: ['p1', 'p2']
+            });
+
+            goodLesson.validate()
+            .then(function() {
+              return badLesson.validate();
+            }, function(err) {
+              done(err);
+            })
+            .then(function() {
+              var err = new Error('Lesson validated with problem list that contained non-problem objects');
+              done(err);
+            }, function(err) {
+              expect(err).to.exist;
+              done();
+            })
+            .catch(done);
 
           });
-
-
 
         })
 
