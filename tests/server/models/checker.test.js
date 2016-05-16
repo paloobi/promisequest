@@ -26,8 +26,8 @@ describe('Checker model', function () {
     describe('content', function() {
 
       it('is required', function(done) {
-        var t = new Checker();
-        t.validate()
+        var checker = new Checker();
+        checker.validate()
         .then(function() {
           var err = new Error('new Checker passed validation without content');
           done(err);
