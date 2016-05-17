@@ -23,7 +23,7 @@ describe("Solution model", function() {
 
   describe('validation', function() {
 
-    var problem, user
+    var problem, user;
     beforeEach('Create dummy problem and user', function(done){
       problem = new Problem({});
       user = new User({});
