@@ -15,14 +15,48 @@ describe("User model", function() {
     mongoose.connect(dbURI, done);
   });
 
-  describe("username", function(){
-    it("is required", function() {});
+  afterEach('Clear DB', function(done) {
+    clearDB(done)
+  });
+
+  xdescribe("username", function(){
+    it("is required", function(done) {});
     it("must be unique", function() {});
     it("can only contain alphanumeric characters and _ or - (no spaces)");
   });
 
-  xdescribe("password", function(){
-    it("is required", function() {});
+  describe("password", function(){
+
+    it("is required", function(done) {
+      var user = new User({
+        username: 'test',
+        email: 'test@test.test',
+      })
+      user.validate()
+      .then(function() {
+        var err = new Error('User created without password');
+        done(err);
+      }, function(err) {
+        expect(err).to.exist;
+        done()
+      })
+    });
+
+    describe("encryption", function() {
+
+      describe('generateSalt method', function () {
+
+        it("should exist", function(){
+          expect(User.generateSalt).to.be.a('function');
+        });
+
+        
+
+      });
+
+
+    });
+
   });
 
   describe("email", function(){
