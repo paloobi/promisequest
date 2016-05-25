@@ -10,7 +10,7 @@ var Problem = mongoose.model('Problem');
 var User = mongoose.model('User');
 var Solution = mongoose.model('Solution');
 
-xdescribe("Solution model", function() {
+describe("Solution model", function() {
 
   beforeEach('Establish DB connection', function(done) {
     if (mongoose.connection.db) return done();
@@ -24,7 +24,7 @@ xdescribe("Solution model", function() {
   describe('validation', function() {
 
     var problem, user;
-    beforeEach('Create dummy problem and user', function(done){
+    beforeEach('Create dummy problem and user', function(){
       problem = new Problem({});
       user = new User({});
     })
@@ -105,11 +105,10 @@ xdescribe("Solution model", function() {
     describe("latestAttempt", function() {
 
       it("is optional", function(done) {
-        var solution = new Solution({
+        Solution.create({
           user: user._id,
           problem: problem._id
-        });
-        solution.validate()
+        })
         .then(function(s) {
           expect(s).to.exist;
           done();
@@ -136,11 +135,10 @@ xdescribe("Solution model", function() {
     describe("latestSolution", function() {
 
       it("is optional", function(done) {
-        var solution = new Solution({
+        Solution.create({
           user: user._id,
           problem: problem._id
-        });
-        solution.validate()
+        })
         .then(function(s) {
           expect(s).to.exist;
           done();
