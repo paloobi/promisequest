@@ -110,6 +110,7 @@ describe("Solution model", function() {
           problem: problem._id
         })
         .then(function(s) {
+          console.log(s);
           expect(s).to.exist;
           done();
         })
@@ -117,12 +118,11 @@ describe("Solution model", function() {
       });
 
       it("can be set to a string value", function(done) {
-        var solution = new Solution({
+        Solution.create({
           user: user._id,
           problem: problem._id,
           latestAttempt: "function(){}"
-        });
-        solution.validate()
+        })
         .then(function(s){
           expect(s).to.exist;
           done();
@@ -147,12 +147,11 @@ describe("Solution model", function() {
       });
 
       it("can be set to a string value", function(done) {
-        var solution = new Solution({
+        Solution.create({
           user: user._id,
           problem: problem._id,
           latestSolution: "function(){ console.log('success') }"
         })
-        solution.validate()
         .then(function(s) {
           expect(s).to.exist;
           done();
