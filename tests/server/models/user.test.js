@@ -261,7 +261,7 @@ describe("User model", function() {
       });
     });
 
-    it("must be in email format", function() {
+    it("must be in email format", function(done) {
       var user = new User({
         username: 'test',
         password: '12345',
@@ -272,8 +272,8 @@ describe("User model", function() {
         done(err);
       }, function(err) {
         expect(err).to.exist;
-        done(); 
-      })
+        done();
+      });
     });
 
   });
@@ -286,12 +286,26 @@ describe("User model", function() {
 
   });
 
-  xdescribe("score", function(){
-    it("defaults to 0", function(){});
+  describe("score", function(){
+    it("defaults to 0", function(){
+      var user = new User({
+        username: 'testuser',
+        password: '12345',
+        email: 'test@test.test'
+      });
+      expect(user.score).to.equal(0);
+    });
   });
 
-  xdescribe("progress", function(){
-    it("defaults to 0", function(){});
+  describe("progress", function(){
+    it("defaults to 0", function(){
+      var user = new User({
+        username: 'testuser',
+        password: '12345',
+        email: 'test@test.test'
+      });
+      expect(user.progress).to.equal(0);
+    });
   });
 
 });

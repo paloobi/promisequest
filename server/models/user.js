@@ -8,7 +8,7 @@ var UserSchema = new mongoose.Schema({
     unique: true,
     validation: {
       validator: function(val) {
-        return /[A-Za-z\-\_].{4, 20}/g.test(val);
+        return /[A-Za-z\-\_]{4,20}/g.test(val);
       }
     }
   },
@@ -19,7 +19,12 @@ var UserSchema = new mongoose.Schema({
   salt: String,
   email: {
     type: String,
-    required: true
+    required: true,
+    validation: {
+      validator: function(val) {
+        return /[A-Za-z0-9].@[A-Za-z0-9].\.[A-Za-z0-9]{2,4}/g.test(val);
+      }
+    }
   },
   google: {
     id: String
@@ -27,8 +32,14 @@ var UserSchema = new mongoose.Schema({
   github: {
     id: String
   },
-  score: Number,
-  progress: Number
+  score: {
+    type: Number,
+    default: 0
+  },
+  progress: {
+    type: Number,
+    default: 0
+  }
 });
 
 UserSchema.statics.generateSalt = function() {
