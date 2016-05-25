@@ -12,12 +12,12 @@ var User = mongoose.model('User');
 describe("User model", function() {
 
   beforeEach('Establish DB connection', function(done) {
-    if (mongoose.connection.db) done();
+    if (mongoose.connection.db) return done();
     mongoose.connect(dbURI, done);
   });
 
   afterEach('Clear DB', function(done) {
-    clearDB(done)
+    clearDB(done);
   });
 
   xdescribe("username", function(){
@@ -87,7 +87,7 @@ describe("User model", function() {
           expect(cryptoStub.calledWith('sha1')).to.be.ok;
         });
 
-        it('should call hash.update with the first and second argument', function() {
+        it('should call hash.update with the first and second argument, in that order', function() {
           var pass = 'password';
           var salt = 'qwertyuiop';
           User.encryptPassword(pass, salt);
@@ -102,7 +102,7 @@ describe("User model", function() {
           var e = User.encryptPassword('asdf', 'qwert');
           expect(hashDigestStub.calledWith('hex')).to.be.ok;
           expect(e).to.be.equal(x);
-        })
+        });
 
 
       });
@@ -114,6 +114,16 @@ describe("User model", function() {
         var createUser = function(){
           return User.create({email: 'test@test.test', username: 'testuser', password: '12345'});
         }
+
+        beforeEach('initiate encrypt and salt spies', function() {
+          encryptSpy = sinon.spy(User, 'encryptPassword');
+          saltSpy = sinon.spy(User, 'generateSalt');
+        });
+
+        afterEach('restore spies', function() {
+          encryptSpy.restore();
+          saltSpy.restore();
+        });
       });
 
 
@@ -121,23 +131,23 @@ describe("User model", function() {
 
   });
 
-  describe("email", function(){
+  xdescribe("email", function(){
     it("is required", function(){});
   });
 
-  describe("google", function(){
+  xdescribe("google", function(){
 
   });
 
-  descibe("github", function(){
+  xdescribe("github", function(){
 
   });
 
-  describe("score", function(){
+  xdescribe("score", function(){
     it("defaults to 0", function(){});
   });
 
-  describe("progress", function(){
+  xdescribe("progress", function(){
     it("defaults to 0", function(){});
   });
 

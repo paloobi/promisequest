@@ -10,10 +10,10 @@ var Problem = mongoose.model('Problem');
 var User = mongoose.model('User');
 var Solution = mongoose.model('Solution');
 
-describe("Solution model", function() {
+xdescribe("Solution model", function() {
 
   beforeEach('Establish DB connection', function(done) {
-    if (mongoose.connection.db) done();
+    if (mongoose.connection.db) return done();
     mongoose.connect(dbURI, done);
   });
 
