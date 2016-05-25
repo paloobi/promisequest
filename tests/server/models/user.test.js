@@ -20,10 +20,100 @@ describe("User model", function() {
     clearDB(done);
   });
 
-  xdescribe("username", function(){
-    it("is required", function(done) {});
-    it("must be unique", function() {});
-    it("can only contain alphanumeric characters and _ or - (no spaces)");
+  describe("username", function(){
+    it("is required", function(done) {
+      var user = new User({
+        password: '12345',
+        email: 'test@test.test'
+      });
+      user.validate().then(function() {
+        var err = new Error('validated user with no username');
+        done(err);
+      }, function(err) {
+        expect(err).to.exist;
+        done();
+      })
+    });
+
+    it("must be unique", function(done) {
+      User.create({
+        username: 'hamlet',
+        password: '12345',
+        email: 'test@test.test'
+      }).then(function(user) {
+        var user2 = new User({
+          username: 'hamlet',
+          password: '67890',
+          email: 'test@test.com'
+        });
+        return user2.validate();
+      }, function(err) {
+        done(err);
+      }).then(function(){
+        var err = new Error('Saved user with existing username');
+        done(err);
+      }, function(err) {
+        expect(err).to.exist;
+        done(err);
+      });
+    });
+
+    it("can only contain alphanumeric characters and _ or - (no spaces)", function(done) {
+      var nonAlpha = new User({
+        username: '%^#fo',
+        password: '12345',
+        email: 'test@test.test'
+      });
+      var spaces = new User({
+        username: 'blah blah',
+        password: '12345',
+        email: 'test@test.com'
+      });
+      nonAlpha.validate().then(function(user){
+        var err = new Error('Accepted username with non-alphanumeric characters: ' + user.username);
+        done(err);
+      }, function(err) {
+        expect(err).to.exist;
+        return spaces.validate()
+      }).then(function(user) {
+        var err = new Error("Accepted username with whitespace characters: " + user.username);
+        done(err);
+      }, function(err) {
+        expect(err).to.exist;
+        done();
+      });
+    });
+
+    it("cannot be less than 4 characters long", function(done) {
+      var user = new User({
+        username: 'bob',
+        password: '12345',
+        email: 'test@test.test'
+      })
+      user.validate().then(function() {
+        var err = new Error("Accepted user with username under 4 characters long");
+        done(err);
+      }, function(err) {
+        expect(err).to.exist;
+        done();
+      });
+    });
+
+    it("cannot be more than 20 characters long", function(done) {
+      var user = new User({
+        username: 'abcdefghijklmnopqrstuvwxyz',
+        email: 'test@test.test'
+      });
+      user.validate().then(function() {
+        var err = new Error("Accepted new user with username over 20 characters long");
+        done(err);
+      }, function(err) {
+        expect(err).to.exist;
+        done();
+      });
+
+    });
+
   });
 
   describe("password", function(){
@@ -39,7 +129,7 @@ describe("User model", function() {
         done(err);
       }, function(err) {
         expect(err).to.exist;
-        done()
+        done();
       })
     });
 
@@ -91,8 +181,8 @@ describe("User model", function() {
           var pass = 'password';
           var salt = 'qwertyuiop';
           User.encryptPassword(pass, salt);
-          expect(hashUpdateSpy.getCall(0).args[0]).to.be.equal(pass);
-          expect(hashUpdateSpy.getCall(1).args[0]).to.be.equal(salt);
+          expect(hashUpdateSpy.getCall(0).args[0]).to.equal(pass);
+          expect(hashUpdateSpy.getCall(1).args[0]).to.equal(salt);
         });
 
         it('should call hash.digest with hex and return the result', function() {
@@ -124,6 +214,31 @@ describe("User model", function() {
           encryptSpy.restore();
           saltSpy.restore();
         });
+
+        it('should call User.encryptPassword with given password and newly generated salt', function (done) {
+          createUser().then(function() {
+            var generatedSalt = saltSpy.getCall(0).returnValue;
+            expect(encryptSpy.calledWith('12345', generatedSalt)).to.be.ok;
+            done();
+          });
+        });
+
+        it('should set the user salt to the generated salt', function(done) {
+          createUser().then(function(user){
+            var generatedSalt = saltSpy.getCall(0).returnValue;
+            expect(user.salt).to.equal(generatedSalt);
+            done();
+          });
+        });
+
+        it('should set user password to hashed password', function(done) {
+          createUser().then(function(user){
+            var createdPassword = encryptSpy.getCall(0).returnValue;
+            expect(user.password).to.equal(createdPassword);
+            done();
+          });
+        });
+
       });
 
 
@@ -131,8 +246,36 @@ describe("User model", function() {
 
   });
 
-  xdescribe("email", function(){
-    it("is required", function(){});
+  describe("email", function(){
+    it("is required", function(done){
+      var user = new User({
+        username: 'test',
+        password: '12345'
+      });
+      user.validate().then(function() {
+        var err = new Error("Accepted user without email");
+        done(err);
+      }, function(err) {
+        expect(err).to.exist;
+        done();
+      });
+    });
+
+    it("must be in email format", function() {
+      var user = new User({
+        username: 'test',
+        password: '12345',
+        email: 'notanemail'
+      });
+      user.validate().then(function(){
+        var err = new Error('Accepted user with invalid email address');
+        done(err);
+      }, function(err) {
+        expect(err).to.exist;
+        done(); 
+      })
+    });
+
   });
 
   xdescribe("google", function(){

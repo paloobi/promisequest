@@ -2,13 +2,25 @@ var mongoose = require('mongoose');
 var crypto = require('crypto');
 
 var UserSchema = new mongoose.Schema({
-  username: String,
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+    validation: {
+      validator: function(val) {
+        return /[A-Za-z\-\_].{4, 20}/g.test(val);
+      }
+    }
+  },
   password: {
     type: String,
     required: true
   },
   salt: String,
-  email: String,
+  email: {
+    type: String,
+    required: true
+  },
   google: {
     id: String
   },
